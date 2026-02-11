@@ -1,0 +1,4 @@
+# Random python and intellij stuff go
+.idea/
+.venv/
+__pycache__/
