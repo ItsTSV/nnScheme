@@ -20,7 +20,7 @@ def _process_layers():
     node_style, edge_color = _get_style_settings()
 
     dot = graphviz.Digraph(format="svg")
-    dot.attr(rankdir="LR", nodesep="0.5", ranksep="1.0")
+    dot.attr(rankdir="LR", nodesep="0.5", ranksep="1.0", pad="0.3")
     dot.attr("node", **node_style)
     dot.attr("edge", fontsize="11", penwidth="1.5", color=edge_color)
 

@@ -5,7 +5,7 @@ Written in Python, Streamlit and Graphviz.
 ### Features
 - [x] UI for creating and editing block diagrams w/ real-time preview
 - [x] Styling options for academic and modern aesthetics
-- [x] Export to .png and .svg
+- [x] Export to .pdf and .svg
 - [x] Linear layers & all activations
 - [ ] Other layers, such as convolutional, normalization etc.
 
