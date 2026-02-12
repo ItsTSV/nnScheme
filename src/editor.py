@@ -14,14 +14,14 @@ def render_editor():
                 "Type", ["Linear", "Conv2d", "Flatten"], index=0, key=f"type_{i}"
             )
             st.session_state.layers[i]["text"] = c2.text_input(
-                "Text", value=layer["text"], key=f"text_{i}"
+                "Additional Text", value=layer["text"], key=f"text_{i}"
             )
             st.session_state.layers[i]["shape"] = c3.text_input(
                 "Size", value=layer["shape"], key=f"shape_{i}"
             )
             if st.session_state.layers[i]["type"] == "Conv2d":
                 st.session_state.layers[i]["params"] = c4.text_input(
-                    "Conv size", value=layer["params"], key=f"params_{i}"
+                    "Conv Size", value=layer["params"], key=f"params_{i}"
                 )
             st.session_state.layers[i]["activation"] = c5.text_input(
                 "Input activation",
@@ -53,7 +53,28 @@ def _render_layer_controls():
                 st.session_state.layers.pop()
 
 
+def render_additional_controls():
+    """Renders additional controls for the editor"""
+    st.markdown("## Additional Controls")
+    st.session_state.diagram_style = st.selectbox(
+        label="Diagram Style", options=["Academia", "Modern"], index=0
+    )
+    c1, c2 = st.columns(2)
+    with c1:
+        st.session_state.outgoing = st.toggle("Render Outgoing Edge?")
+    with c2:
+        st.session_state.outgoing_text = st.text_input(
+            label="Outgoing Text", value="Output"
+        )
+
+
 def _check_session_info():
     """Ensures layers are present in current session"""
     if "layers" not in st.session_state:
         st.session_state.layers = []
+    if "outgoing" not in st.session_state:
+        st.session_state.outgoing = False
+    if "outgoing_text" not in st.session_state:
+        st.session_state.outgoing_text = "Output"
+    if "diagram_style" not in st.session_state:
+        st.session_state.diagram_style = "Academia"
