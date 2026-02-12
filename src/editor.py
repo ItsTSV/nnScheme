@@ -14,7 +14,7 @@ def render_editor():
                 "Type", ["Linear", "Conv2d", "Flatten"], index=0, key=f"type_{i}"
             )
             st.session_state.layers[i]["text"] = c2.text_input(
-                "Additional Text", value=layer["text"], key=f"text_{i}"
+                "Additional text", value=layer["text"], key=f"text_{i}"
             )
             st.session_state.layers[i]["shape"] = c3.text_input(
                 "Size", value=layer["shape"], key=f"shape_{i}"
@@ -32,10 +32,10 @@ def render_editor():
 
 def _render_layer_controls():
     """Renders buttons that add/remove layers"""
-    st.markdown("## Layer Controls")
+    st.markdown("## Layer controls")
     left_col, right_col = st.columns(2)
     with right_col:
-        if st.button("Add Layer"):
+        if st.button("Add layer"):
             st.session_state.layers.append(
                 {
                     "type": "Conv2D",
@@ -48,23 +48,23 @@ def _render_layer_controls():
                 }
             )
     with left_col:
-        if st.button("Remove Last"):
+        if st.button("Remove last"):
             if len(st.session_state.layers) > 0:
                 st.session_state.layers.pop()
 
 
 def render_additional_controls():
     """Renders additional controls for the editor"""
-    st.markdown("## Additional Controls")
+    st.markdown("## Additional controls")
     st.session_state.diagram_style = st.selectbox(
-        label="Diagram Style", options=["Academia", "Modern"], index=0
+        label="Diagram style", options=["Academia", "Modern"], index=0
     )
     c1, c2 = st.columns(2)
     with c1:
-        st.session_state.outgoing = st.toggle("Render Outgoing Edge?")
+        st.session_state.outgoing = st.toggle("Render outgoing edge?")
     with c2:
         st.session_state.outgoing_text = st.text_input(
-            label="Outgoing Text", value="Output"
+            label="Outgoing text", value="Output"
         )
 
 

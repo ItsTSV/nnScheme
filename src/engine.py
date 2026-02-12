@@ -1,15 +1,16 @@
 import streamlit as st
 import graphviz
+import textwrap
 
 
 def render_schema():
     """Renders the graphviz neural network"""
     dot = _process_layers()
 
-    st.markdown("## Export Options")
+    st.markdown("## Export options")
     _render_export(dot)
 
-    st.markdown("## Neural Network Scheme")
+    st.markdown("## Neural network scheme")
     st.graphviz_chart(dot)
 
 
@@ -25,8 +26,8 @@ def _process_layers():
 
     for i, layer in enumerate(layers):
         layer_type = layer.get("type", "Layer")
-        layer_size = layer.get("shape", "size")
-        layer_comment = layer.get("text", "")
+        layer_size = _wrap_block_label(layer.get("shape", "size"))
+        layer_comment = _wrap_block_label(layer.get("text", ""))
         layer_activation = layer.get("activation", "None")
 
         label = f"{layer_type.upper()}\l"
@@ -47,7 +48,6 @@ def _process_layers():
     return dot
 
 
-
 def _render_export(dot):
     """Renders export options for scheme"""
     c1, c2 = st.columns(2)
@@ -55,11 +55,10 @@ def _render_export(dot):
     try:
         svg_data = dot.pipe(format='svg').decode('utf-8')
         c1.download_button(
-            label="📥 Download SVG (Vector)",
+            label="Download .svg",
             data=svg_data,
             file_name="nn_architecture.svg",
             mime="image/svg+xml",
-            help="Best for web or editing in Illustrator/Inkscape"
         )
     except Exception as e:
         c1.error("SVG export requires 'Graphviz' installed on your system OS.")
@@ -67,11 +66,10 @@ def _render_export(dot):
     try:
         pdf_data = dot.pipe(format='pdf')
         c2.download_button(
-            label="📥 Download PDF (LaTeX ready)",
+            label="Download .pdf",
             data=pdf_data,
             file_name="nn_architecture.pdf",
             mime="application/pdf",
-            help="Best for LaTeX documents (retains vector quality)"
         )
     except Exception as e:
         c2.error("PDF export requires 'Graphviz' installed on your system OS.")
@@ -100,3 +98,11 @@ def _get_style_settings() -> tuple[dict, str]:
             "style": "filled,bold",
         })
     return node_style, edge_color
+
+
+def _wrap_block_label(text, width=14):
+    """Wraps text for better display in graph nodes"""
+    if not text or text.isspace():
+        return ""
+    wrapped = textwrap.wrap(text, width=width)
+    return "\\l".join(wrapped)
