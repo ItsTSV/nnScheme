@@ -31,10 +31,11 @@ def _process_layers():
         layer_activation = layer.get("activation", "None")
 
         label = f"{layer_type.upper()}\l"
-        label += f"({layer_size})\l"
+        label += f"{layer_size}\l"
         if layer_comment.strip():
             label += f"{layer_comment}\l"
 
+        dot.attr("node", **(_get_layer_type_settings(layer_type, node_style)))
         dot.node(f"n{i}", label=label)
 
         if i > 0:
@@ -43,7 +44,9 @@ def _process_layers():
 
     if st.session_state.outgoing and layers:
         dot.node("output_end", label=" ", shape="none", width="0", height="0")
-        dot.edge(f"n{len(layers) - 1}", "output_end", label=st.session_state.outgoing_text)
+        dot.edge(
+            f"n{len(layers) - 1}", "output_end", label=st.session_state.outgoing_text
+        )
 
     return dot
 
@@ -53,7 +56,7 @@ def _render_export(dot):
     c1, c2 = st.columns(2)
 
     try:
-        svg_data = dot.pipe(format='svg').decode('utf-8')
+        svg_data = dot.pipe(format="svg").decode("utf-8")
         c1.download_button(
             label="Download .svg",
             data=svg_data,
@@ -64,7 +67,7 @@ def _render_export(dot):
         c1.error("SVG export requires 'Graphviz' installed on your system OS.")
 
     try:
-        pdf_data = dot.pipe(format='pdf')
+        pdf_data = dot.pipe(format="pdf")
         c2.download_button(
             label="Download .pdf",
             data=pdf_data,
@@ -88,16 +91,28 @@ def _get_style_settings() -> tuple[dict, str]:
         "penwidth": "1.1",
         "color": "black",
         "style": "bold",
-        "fillcolor": "white"
+        "fillcolor": "white",
     }
     if st.session_state.diagram_style == "Modern":
         edge_color = "#4A90E2"
-        node_style.update({
-            "color": "#4A90E2",
-            "fillcolor": "#E6F0FA",
-            "style": "filled,bold",
-        })
+        node_style.update(
+            {
+                "color": "#4A90E2",
+                "fillcolor": "#E6F0FA",
+                "style": "filled,bold",
+            }
+        )
     return node_style, edge_color
+
+
+def _get_layer_type_settings(layer_type: str, settings: dict) -> dict:
+    """Returns style settings based on the layer type"""
+    if layer_type == "Conv2d":
+        return {**settings, "shape": "tab"}
+    elif layer_type == "Flatten":
+        return {**settings, "width": "0.8"}
+
+    return settings
 
 
 def _wrap_block_label(text, width=14):

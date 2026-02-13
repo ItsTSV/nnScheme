@@ -7,7 +7,7 @@ Written in Python, Streamlit and Graphviz.
 - [x] Styling options for academic and modern aesthetics
 - [x] Export to .pdf and .svg
 - [x] Linear layers & all activations
-- [ ] Other layers, such as convolutional, normalization etc.
+- [x] Other layers, such as convolutional, normalization etc.
 
 ### Usage
 Desktop:
